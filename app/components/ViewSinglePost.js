@@ -3,6 +3,7 @@ import Page from "./Page"
 import Axios from "axios"
 import { useParams, Link } from "react-router-dom"
 import LoadingDotsIcon from "./LoadingDotsIcon"
+import ReactMarkdown from "react-markdown"
 
 function ViewSinglePost() {
   const { id } = useParams()
@@ -10,17 +11,20 @@ function ViewSinglePost() {
   const [post, setPost] = useState()
 
   useEffect(() => {
+    const ourRequest = Axios.CancelToken.source()
     async function fetchPost() {
       try {
-        const response = await Axios.get(`/post/${id}`)
+        const response = await Axios.get(`/post/${id}`, { cancelToken: ourRequest.token })
         setPost(response.data)
         setIsLoading(false)
-        console.log(response.data)
       } catch (e) {
-        console.log("There was a problem.")
+        console.log("There was a problem or the request was canceled.")
       }
     }
     fetchPost()
+    return () => {
+      ourRequest.cancel()
+    }
   }, [])
 
   if (isLoading)
@@ -54,7 +58,7 @@ function ViewSinglePost() {
       </p>
 
       <div className="body-content">
-        <p>{post.body}</p>
+        <ReactMarkdown children={post.body} allowedTypes={["paragraph", "strong", "emphasis", "text", "heading", "list", "listItem"]} />
       </div>
     </Page>
   )
