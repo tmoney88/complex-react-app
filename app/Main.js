@@ -6,6 +6,7 @@ import Axios from "axios"
 Axios.defaults.baseURL = "http://localhost:8080"
 import StateContext from "./StateContext"
 import DispatchContext from "./DispatchContext"
+import { CSSTransition } from "react-transition-group"
 
 //Components
 import Header from "./components/Header"
@@ -99,7 +100,9 @@ function Main() {
               <NotFound />
             </Route>
           </Switch>
-          {state.isSearchOpen ? <Search /> : ""}
+          <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
+            <Search />
+          </CSSTransition>
           <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>
