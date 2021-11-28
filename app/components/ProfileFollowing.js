@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import Axios from "axios"
 import { useParams, Link } from "react-router-dom"
 import LoadingDotsIcon from "./LoadingDotsIcon"
+import StateContext from "../StateContext"
 
 function ProfileFollowing(props) {
   const { username } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [posts, setPosts] = useState([])
+  const appState = useContext(StateContext)
 
   useEffect(() => {
     const ourRequest = Axios.CancelToken.source()
@@ -36,6 +38,8 @@ function ProfileFollowing(props) {
           </Link>
         )
       })}
+      {posts.length == 0 && appState.user.username == username && <p className="list-group-item list-group-item-action">You aren't following anybody yet.</p>}
+      {posts.length == 0 && appState.user.username != username && <p className="list-group-item list-group-item-action">This user isn't following anybody yet.</p>}
     </div>
   )
 }
