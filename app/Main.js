@@ -34,7 +34,8 @@ function Main() {
       avatar: localStorage.getItem("complexappAvatar")
     },
     isSearchOpen: false,
-    isChatOpen: false
+    isChatOpen: false,
+    unreadChatCount: 0
   }
   function ourReducer(draft, action) {
     switch (action.type) {
@@ -59,6 +60,12 @@ function Main() {
         return
       case "closeChat":
         draft.isChatOpen = false
+      case "incrementUnreadChatCount":
+        draft.unreadChatCount++
+        return
+      case "clearUnreadChatCount":
+        draft.unreadChatCount = 0
+        return
     }
   }
   const [state, dispatch] = useImmerReducer(ourReducer, initialState)
