@@ -24,7 +24,7 @@ function Chat() {
   }, [appState.isChatOpen])
 
   useEffect(() => {
-    socket.current = io("http://localhost:8080")
+    socket.current = io(process.env.BACKENDURL || "https://backend-for-udemy-app-react.herokuapp.com")
     socket.current.on("chatFromServer", message => {
       setState(draft => {
         draft.chatMessages.push(message)
